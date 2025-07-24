@@ -24,7 +24,7 @@ set(ZENOHC_CARGO_FLAGS "--no-default-features$<SEMICOLON>--features=shared-memor
 #    (Improve AdvancedSub for faster delivery of first receveived data)
 ament_vendor(zenoh_c_vendor
   VCS_URL https://github.com/habby1012/zenoh-c.git
-  VCS_VERSION 364f0bbb20cec7685476a8c8e174d8cf1f516855
+  VCS_VERSION b74c915bb61923bcfbafd65c11b8b9b7405231b8
   CMAKE_ARGS
     "-DZENOHC_CARGO_FLAGS=${ZENOHC_CARGO_FLAGS}"
     "-DZENOHC_BUILD_WITH_UNSTABLE_API=TRUE"
