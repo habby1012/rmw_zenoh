@@ -38,6 +38,9 @@
 #include "rmw/get_topic_endpoint_info.h"
 #include "rmw/impl/cpp/macros.hpp"
 
+#include <cstdio>
+#include <inttypes.h>
+
 namespace rmw_zenoh_cpp
 {
 ///=============================================================================
@@ -503,7 +506,22 @@ rmw_ret_t SubscriptionData::take_one_message(
       msg_data->attachment.copy_gid().data(),
       16);
     message_info->from_intra_process = false;
-  }
+
+    int64_t latency = message_info->received_timestamp - message_info->source_timestamp;
+
+    static FILE* flog = fopen("/home/newslab/repos/thesis/result/zenoh_latency.csv", "w");
+    static bool _vb = (setvbuf(flog, nullptr, _IOFBF, 1 << 20) == 0);
+    static bool first_write = true;
+    if (first_write) {
+        fprintf(flog, "topic,seq,latency_ns\n");
+        first_write = false;
+    }
+
+    fprintf(flog, "%s,%" PRId64 ",%" PRId64 "\n",
+            entity_->topic_info().value().name_.c_str(),
+            (uint64_t)message_info->publication_sequence_number,
+            latency);
+   }
   *taken = true;
 
   return RMW_RET_OK;
